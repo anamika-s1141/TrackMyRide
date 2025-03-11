@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Notifications - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://miro.medium.com/v2/resize:fit:880/0*SQy-aKEXu_WSoRd-.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: rgba(0, 77, 64, 0.9);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            color: black;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-send {
+            background: #28a745;
+            margin-top: 10px;
+        }
+        .btn-send:hover {
+            background: #218838;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Manage Notifications - TrackMyRide</div>
+
+    <!-- Section: Send Alerts to Affected Users -->
+    <div class="container">
+        <h2>Send Alert to Affected Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Bus No</th>
+                    <th>Location of Breakdown</th>
+                    <th>Describe the Issue</th>
+                    <th>Alternative Transport Details</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="alertTable"></tbody>
+        </table>
+<br>
+        <h2>Add Alert</h2>
+        <input type="date" id="alertDate">
+        <input type="text" id="busNumber" placeholder="Bus Number">
+        <input type="text" id="breakdownLocation" placeholder="Location of Breakdown">
+        <input type="text" id="issueDescription" placeholder="Describe the Issue">
+        <input type="text" id="alternativeTransport" placeholder="Alternative Transport Details">
+        <button class="btn btn-send" onclick="sendAlert()">Send Alert</button>
+    </div>
+
+    <!-- Section: Alert Students with Unpaid Dues -->
+    <div class="container">
+        <h2>Send Alert to Students with Unpaid Dues</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Bus No</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="unpaidStudentsTable"></tbody>
+        </table>
+<br>
+        <h2>Add Unpaid Student Alert</h2>
+        <input type="date" id="unpaidAlertDate">
+        <input type="text" id="studentID" placeholder="Student ID">
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="text" id="busNo" placeholder="Bus Number">
+        <button class="btn btn-send" onclick="sendUnpaidAlert()">Send Alert</button>
+    </div>
+
+    <script>
+        function sendAlert() {
+            let alertDate = document.getElementById("alertDate").value;
+            let busNumber = document.getElementById("busNumber").value.trim();
+            let breakdownLocation = document.getElementById("breakdownLocation").value.trim();
+            let issueDescription = document.getElementById("issueDescription").value.trim();
+            let alternativeTransport = document.getElementById("alternativeTransport").value.trim();
+
+            if (!alertDate || !busNumber || !breakdownLocation || !issueDescription || !alternativeTransport) {
+                alert("Please enter all details.");
+                return;
+            }
+
+            let tableBody = document.getElementById("alertTable");
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${alertDate}</td>
+                <td>${busNumber}</td>
+                <td>${breakdownLocation}</td>
+                <td>${issueDescription}</td>
+                <td>${alternativeTransport}</td>
+                <td>
+                    <button class="btn btn-send" onclick="deleteAlert(this)">Remove</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+
+            // Clear input fields
+            document.getElementById("alertDate").value = "";
+            document.getElementById("busNumber").value = "";
+            document.getElementById("breakdownLocation").value = "";
+            document.getElementById("issueDescription").value = "";
+            document.getElementById("alternativeTransport").value = "";
+        }
+
+        function sendUnpaidAlert() {
+            let unpaidAlertDate = document.getElementById("unpaidAlertDate").value;
+            let studentID = document.getElementById("studentID").value.trim();
+            let studentName = document.getElementById("studentName").value.trim();
+            let busNo = document.getElementById("busNo").value.trim();
+
+            if (!unpaidAlertDate || !studentID || !studentName || !busNo) {
+                alert("Please enter all details.");
+                return;
+            }
+
+            let tableBody = document.getElementById("unpaidStudentsTable");
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${unpaidAlertDate}</td>
+                <td>${studentID}</td>
+                <td>${studentName}</td>
+                <td>${busNo}</td>
+                <td>
+                    <button class="btn btn-send" onclick="deleteAlert(this)">Remove</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+
+            // Clear input fields
+            document.getElementById("unpaidAlertDate").value = "";
+            document.getElementById("studentID").value = "";
+            document.getElementById("studentName").value = "";
+            document.getElementById("busNo").value = "";
+        }
+
+        function deleteAlert(button) {
+            button.closest("tr").remove();
+        }
+    </script>
+
+</body>
+</html>

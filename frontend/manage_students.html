@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://eedunext.com/assets/images/page-titles/case-two.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: rgba(0, 77, 64, 0.9);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 32px;
+            padding: 25px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-edit {
+            background: #ffc107;
+        }
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        .btn-delete {
+            background: #dc3545;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .btn-add {
+            background: #28a745;
+            margin-top: 20px;
+        }
+        .btn-add:hover {
+            background: #218838;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Manage Students - TrackMyRide</div>
+
+    <div class="container">
+        <h3>Regular Students</h3>
+        <table id="regularStudentTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="regularStudentList"></tbody>
+        </table>
+
+        <h3>Irregular Students (E-Ticket Holders)</h3>
+        <table id="irregularStudentTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="irregularStudentList"></tbody>
+        </table>
+
+        <h3>Add New Student</h3>
+        <select id="studentType">
+            <option value="regular">Regular</option>
+            <option value="irregular">Irregular (E-Ticket Holder)</option>
+        </select>
+        <input type="text" id="studentID" placeholder="Student ID">
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="email" id="studentEmail" placeholder="Student Email">
+        <button class="btn btn-add" onclick="addStudent()">Add Student</button>
+    </div>
+
+    <script>
+        function studentExists(id) {
+            let regularStudents = document.getElementById("regularStudentList").children;
+            let irregularStudents = document.getElementById("irregularStudentList").children;
+
+            for (let student of regularStudents) {
+                if (student.cells[0].innerText === id) return true;
+            }
+            for (let student of irregularStudents) {
+                if (student.cells[0].innerText === id) return true;
+            }
+            return false;
+        }
+
+        function addStudent() {
+            let studentType = document.getElementById("studentType").value;
+            let id = document.getElementById("studentID").value.trim();
+            let name = document.getElementById("studentName").value.trim();
+            let email = document.getElementById("studentEmail").value.trim();
+
+            if (!id || !name || !email) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            if (studentExists(id)) {
+                alert("Error: A student with this ID already exists in the system.");
+                return;
+            }
+
+            let tableBody = studentType === "regular" ? 
+                document.getElementById("regularStudentList") : 
+                document.getElementById("irregularStudentList");
+
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${email}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editStudent(this)">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteStudent(this)">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+
+            document.getElementById("studentID").value = "";
+            document.getElementById("studentName").value = "";
+            document.getElementById("studentEmail").value = "";
+        }
+
+        function deleteStudent(button) {
+            button.closest("tr").remove();
+        }
+
+        function editStudent(button) {
+            let row = button.closest("tr");
+            let cells = row.getElementsByTagName("td");
+
+            let newID = prompt("Edit Student ID:", cells[0].innerText);
+            let newName = prompt("Edit Student Name:", cells[1].innerText);
+            let newEmail = prompt("Edit Student Email:", cells[2].innerText);
+
+            if (newID && newName && newEmail) {
+                if (newID !== cells[0].innerText && studentExists(newID)) {
+                    alert("Error: Another student already has this ID.");
+                    return;
+                }
+                cells[0].innerText = newID;
+                cells[1].innerText = newName;
+                cells[2].innerText = newEmail;
+            }
+        }
+    </script>
+
+</body>
+</html>

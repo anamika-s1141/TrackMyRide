@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage E-Tickets - TrackMyRide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { 
+            background: url('https://thumbs.dreamstime.com/b/inspiration-showing-sign-e-ticket-word-flight-booking-which-details-registered-electronically-text-business-overview-268732126.jpg?w=1400') no-repeat center center fixed; 
+            background-size: cover; color: white; display: flex; flex-direction: column; align-items: center; 
+        }
+        .header { background: rgba(0, 77, 64, 0.9); padding: 20px; text-align: center; width: 100%; color: white; font-size: 1.8rem; font-weight: bold; }
+        .container { background: rgba(255, 255, 255, 0.95); margin: 20px; padding: 20px; border-radius: 10px; width: 95%; max-width: 900px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); color: black; }
+        h2 { text-align: center; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table, th, td { border: 1px solid #ddd; }
+        th, td { padding: 10px; text-align: center; font-size: 16px; }
+        th { background: #007bff; color: white; }
+        .btn { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-edit { background: #ffc107; } .btn-edit:hover { background: #e0a800; }
+        .btn-delete { background: #dc3545; } .btn-delete:hover { background: #c82333; }
+        .btn-add { background: #28a745; margin-top: 10px; } .btn-add:hover { background: #218838; }
+        select, input { width: 100%; padding: 10px; margin-top: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">Manage E-Tickets - TrackMyRide</div>
+
+    <div class="container">
+        <h2>Issued E-Tickets</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Bus No</th>
+                    <th>Start Date</th>
+                    <th>Validity</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="ticketTableBody"></tbody>
+        </table>
+        <br>
+        <h2>Issue New E-Ticket</h2>
+        <input type="text" id="studentID" placeholder="Student ID">
+        <input type="text" id="studentName" placeholder="Student Name">
+        <select id="busNo">
+            <option value="KL 35 A 4324">Bus 1 - KL 35 A 4324</option>
+            <option value="KL 35 B 7077">Bus 2 - KL 35 B 7077</option>
+            <option value="KL 35 C 5986">Bus 3 - KL 35 C 5986</option>
+            <option value="KL 35 A 9991">Bus 4 - KL 35 A 9991</option>
+            <option value="KL 35 D 1325">Bus 5 - KL 35 D 1325</option>
+        </select>
+        <input type="number" id="validityDays" placeholder="Valid for (Days)">
+        <input type="number" id="amount" placeholder="Amount">
+        <button class="btn btn-add" onclick="addETicket()">Issue E-Ticket</button>
+    </div>
+
+    <script>
+        function addETicket() {
+            let studentID = document.getElementById("studentID").value.trim();
+            let studentName = document.getElementById("studentName").value.trim();
+            let busNo = document.getElementById("busNo").value;
+            let validity = parseInt(document.getElementById("validityDays").value.trim());
+            let amount = parseFloat(document.getElementById("amount").value.trim());
+
+            if (!studentID || !studentName || isNaN(validity) || isNaN(amount) || validity <= 0) {
+                alert("Please enter valid details.");
+                return;
+            }
+
+            let startDate = new Date().toISOString().split('T')[0];
+            let expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + validity);
+
+            let status = "Active";
+            if (!(validity === 1 && amount === 0)) {
+                let currentDate = new Date();
+                if (expiryDate < currentDate) {
+                    status = "Inactive";
+                }
+            }
+
+            let tableBody = document.getElementById("ticketTableBody");
+
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${studentID}</td>
+                <td>${studentName}</td>
+                <td>${busNo}</td>
+                <td>${startDate}</td>
+                <td class="validity">${validity} Days</td>
+                <td class="amount">₹${amount}</td>
+                <td class="status" data-expiry="${expiryDate}">${status}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editTicket(this)">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteTicket(this)">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+            document.getElementById("studentID").value = "";
+            document.getElementById("studentName").value = "";
+            document.getElementById("validityDays").value = "";
+            document.getElementById("amount").value = "";
+            updateStatus();
+        }
+
+        function deleteTicket(button) {
+            button.closest("tr").remove();
+        }
+
+        function editTicket(button) {
+            let row = button.closest("tr");
+            let validityCell = row.querySelector(".validity");
+            let amountCell = row.querySelector(".amount");
+
+            let newValidity = prompt("Enter new validity (days):", validityCell.innerText.replace(" Days", ""));
+            let newAmount = prompt("Enter new amount:", amountCell.innerText.replace("₹", ""));
+
+            if (newValidity !== null && newAmount !== null && !isNaN(newValidity) && !isNaN(newAmount) && newValidity > 0) {
+                validityCell.innerText = newValidity + " Days";
+                amountCell.innerText = "₹" + newAmount;
+                updateStatus();
+            } else {
+                alert("Invalid input. Please enter numbers only.");
+            }
+        }
+
+        function updateStatus() {
+            let rows = document.querySelectorAll(".status");
+            let currentDate = new Date();
+
+            rows.forEach(statusCell => {
+                let expiryDate = new Date(statusCell.dataset.expiry);
+                let validityText = statusCell.previousElementSibling.previousElementSibling.innerText;
+                let amountText = statusCell.previousElementSibling.innerText;
+
+                let validity = parseInt(validityText.replace(" Days", ""));
+                let amount = parseFloat(amountText.replace("₹", ""));
+
+                if (!(validity === 1 && amount === 0) && expiryDate < currentDate) {
+                    statusCell.innerText = "Inactive";
+                    statusCell.style.color = "red";
+                } else {
+                    statusCell.innerText = "Active";
+                    statusCell.style.color = "green";
+                }
+            });
+        }
+
+        setInterval(updateStatus, 60000);
+    </script>
+
+</body>
+</html>

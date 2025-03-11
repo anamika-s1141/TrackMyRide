@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Buses - TrackMyRide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: url('https://fleethalo.com/img/industries/passenger-transport/passenger-transport-hero.webp') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .header {
+      background: rgba(0, 77, 64, 0.9);
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      margin: 30px;
+      padding: 25px;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 1200px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      color: black;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 15px;
+      text-align: center;
+      font-size: 16px;
+    }
+    th {
+      background: #007bff;
+      color: white;
+    }
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      margin: 2px;
+      text-decoration: none;
+    }
+    .btn-edit {
+      background: #ffc107;
+    }
+    .btn-edit:hover {
+      background: #e0a800;
+    }
+    .btn-delete {
+      background: #dc3545;
+    }
+    .btn-delete:hover {
+      background: #c82333;
+    }
+    .btn-add {
+      background: #28a745;
+      margin-top: 10px;
+    }
+    .btn-add:hover {
+      background: #218838;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">Manage Buses - TrackMyRide</div>
+
+  <div class="container">
+    <h2>Bus List</h2>
+    <table id="busTable">
+      <thead>
+        <tr>
+          <th>Bus No</th>
+          <th>Number Plate</th>
+          <th>Route with Timing</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="busList">
+        <!-- Preloaded Bus Data -->
+        <tr>
+          <td>Bus 1</td>
+          <td>KL 35 A 4324</td>
+          <td>Changanassery (7:30 AM) → Chingavanam (7:45 AM) → Njaliyakuzhi (7:55 AM) → Kaithepalam (08:05 AM) → Puthuppally (08:10 AM) → Manarcadu (08:15 AM) → Ayarkunnam (08:30 AM) → CEK (8:45 AM)</td>
+          <td>
+            <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+            <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Bus 2</td>
+          <td>KL 35 B 7077</td>
+          <td>Kottayam (7:50 AM) → Kumaranallor (08:00 AM) → Sankranthi (08:05 AM) → Ettumanoor (08:10 AM) → Thiruvanchoor (08:20 AM) → Ayarkunnam (08:30 AM) → Manthadi (8:40 AM) → CEK (08:45 AM)</td>
+          <td>
+            <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+            <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Bus 3</td>
+          <td>KL 35 C 5986</td>
+          <td>Poonjar (7:50 AM) → Erattupettah (08:08 AM) → Bharananganam (08:15 AM) → Pala (08:25 AM) → Mutholi (08:30 AM) → Cherpunkal (08:35 AM) → Kidangoor (08:40 AM) → CEK (08:45 AM)</td>
+          <td>
+            <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+            <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Bus 4</td>
+          <td>KL 35 A 9991</td>
+          <td>Karukachal (7:45 AM) → Pampady (08:00 AM) → Kodungoor (08:15 AM) → Pallikkathodu (08:30 AM) → Mattakkara (08:40 AM) → CEK (08:45 AM)</td>
+          <td>
+            <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+            <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Bus 5</td>
+          <td>KL 35 D 1325</td>
+          <td>Thalayolaparambu (7:45 AM) → Kaduthuruthy (08:00 AM) → Kuravilangad (08:10 AM) → Vempally (08:20 AM) → Vayala (08:30 AM) → Kidangoor (08:35 AM) → CEK (08:45 AM)</td>
+          <td>
+            <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+            <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+     <br>
+    <h2>Add New Bus</h2>
+    <input type="text" id="busNo" placeholder="Bus No">
+    <input type="text" id="numberPlate" placeholder="Number Plate">
+    <input type="text" id="busRoute" placeholder="Route">
+    <button class="btn btn-add" onclick="addBus()">Add Bus</button>
+  </div>
+
+  <script>
+    function busExists(busNo) {
+      let buses = document.getElementById("busList").children;
+      for (let bus of buses) {
+        if (bus.cells[0].innerText === busNo) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function addBus() {
+      let busNo = document.getElementById("busNo").value.trim();
+      let numberPlate = document.getElementById("numberPlate").value.trim();
+      let route = document.getElementById("busRoute").value.trim();
+
+      if (!busNo || !numberPlate || !route) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      if (busExists(busNo)) {
+        alert("Error: A bus with this number already exists.");
+        return;
+      }
+
+      let tableBody = document.getElementById("busList");
+
+      let row = document.createElement("tr");
+      row.innerHTML = `
+                <td>${busNo}</td>
+                <td>${numberPlate}</td>
+                <td>${route}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editBus(this)">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteBus(this)">Delete</button>
+                </td>
+            `;
+
+      tableBody.appendChild(row);
+
+      document.getElementById("busNo").value = "";
+      document.getElementById("numberPlate").value = "";
+      document.getElementById("busRoute").value = "";
+    }
+
+    function deleteBus(button) {
+      button.closest("tr").remove();
+    }
+
+    function editBus(button) {
+      let row = button.closest("tr");
+      let cells = row.getElementsByTagName("td");
+
+      let newBusNo = prompt("Edit Bus No:", cells[0].innerText);
+      let newNumberPlate = prompt("Edit Number Plate:", cells[1].innerText);
+      let newRoute = prompt("Edit Route:", cells[2].innerText);
+
+      if (newBusNo && newNumberPlate && newRoute) {
+        if (newBusNo !== cells[0].innerText && busExists(newBusNo)) {
+          alert("Error: Another bus already has this number.");
+          return;
+        }
+        cells[0].innerText = newBusNo;
+        cells[1].innerText = newNumberPlate;
+        cells[2].innerText = newRoute;
+      }
+    }
+  </script>
+
+</body>
+</html>

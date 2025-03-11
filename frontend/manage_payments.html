@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Payments - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://img.freepik.com/premium-photo/currency-exchange-money-concept-with-orange-glowing-digital-dollar-symbol-abstract-dark-technological-background-3d-rendering_670147-1723.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: rgba(0, 77, 64, 0.9);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            color: black;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-edit {
+            background: #ffc107;
+        }
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        .btn-delete {
+            background: #dc3545;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .btn-add {
+            background: #28a745;
+            margin-top: 10px;
+        }
+        .btn-add:hover {
+            background: #218838;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Manage Payments - TrackMyRide</div>
+
+    <!-- Bus Payment Sections -->
+    <script>
+        let buses = [
+            { id: "bus1", number: "BUS-1(KL 35 A 4324)" },
+            { id: "bus2", number: "BUS-2(KL 35 B 7077)" },
+            { id: "bus3", number: "BUS-3(KL 35 C 5986)" },
+            { id: "bus4", number: "BUS-4(KL 35 A 9991)" },
+            { id: "bus5", number: "BUS-5(KL 35 D 1325)" }
+        ];
+    </script>
+
+    <div id="busesContainer"></div>
+
+    <script>
+        let studentRecords = {}; // Store Student ID records for validation
+
+        function addPayment(busID) {
+            let userType = document.getElementById(busID + "UserType").value;
+            let studentID = document.getElementById(busID + "StudentID").value.trim();
+            let studentName = document.getElementById(busID + "StudentName").value.trim();
+            let amount = document.getElementById(busID + "Amount").value.trim();
+
+            if (!studentID || !studentName || !amount || amount <= 0) {
+                alert("Please enter valid details.");
+                return;
+            }
+
+            if (!studentRecords[busID]) {
+                studentRecords[busID] = {};
+            }
+
+            // Check if the student ID already exists in the other table
+            if (studentRecords[busID][studentID]) {
+                alert("Error: Student ID already exists in the other category.");
+                return;
+            }
+
+            // Determine which table to add to
+            let tableBody;
+            if (userType === "regular") {
+                tableBody = document.getElementById(busID + "RegularPayments");
+            } else {
+                tableBody = document.getElementById(busID + "IrregularPayments");
+            }
+
+            // Add student to the corresponding category
+            studentRecords[busID][studentID] = userType;
+
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${studentID}</td>
+                <td>${studentName}</td>
+                <td>₹${amount}</td>
+                <td>Pending</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editPayment(this)">Edit</button>
+                    <button class="btn btn-delete" onclick="deletePayment(this, '${busID}', '${studentID}')">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+
+            // Clear input fields
+            document.getElementById(busID + "StudentID").value = "";
+            document.getElementById(busID + "StudentName").value = "";
+            document.getElementById(busID + "Amount").value = "";
+        }
+
+        function editPayment(button) {
+            let row = button.closest("tr");
+            let cells = row.getElementsByTagName("td");
+
+            let newAmount = prompt("Edit Amount:", cells[2].innerText.replace("₹", ""));
+            if (newAmount && newAmount > 0) {
+                cells[2].innerText = `₹${newAmount}`;
+            } else {
+                alert("Invalid amount entered.");
+            }
+        }
+
+        function deletePayment(button, busID, studentID) {
+            delete studentRecords[busID][studentID]; // Remove from record
+            button.closest("tr").remove();
+        }
+
+        function renderBuses() {
+            let container = document.getElementById("busesContainer");
+            buses.forEach(bus => {
+                container.innerHTML += `
+                    <div class="container">
+                        <h2>${bus.number}</h2>
+        
+                        <h3>Regular Users</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="${bus.id}RegularPayments"></tbody>
+                        </table>
+        
+                        <h3>Irregular Users (E-Ticket)</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="${bus.id}IrregularPayments"></tbody>
+                        </table>
+        
+                        <h2>Add Payment Details</h2>
+                        <select id="${bus.id}UserType">
+                            <option value="regular">Regular</option>
+                            <option value="irregular">Irregular (E-Ticket)</option>
+                        </select>
+                        <input type="text" id="${bus.id}StudentID" placeholder="Student ID">
+                        <input type="text" id="${bus.id}StudentName" placeholder="Student Name">
+                        <input type="number" id="${bus.id}Amount" placeholder="Amount">
+                        <button class="btn btn-add" onclick="addPayment('${bus.id}')">Add Payment</button>
+                    </div>
+                `;
+            });
+        }
+
+        renderBuses();
+    </script>
+
+</body>
+</html>

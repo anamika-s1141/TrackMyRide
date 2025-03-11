@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Schedules - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://static.vecteezy.com/system/resources/previews/014/663/473/non_2x/children-getting-into-school-bus-flat-color-illustration-vehicle-for-students-transportation-service-fully-editable-2d-simple-cartoon-characters-with-city-street-on-background-vector.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color:white;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+        .header {
+            background: rgba(77, 1, 1, 0.9);
+            padding: 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 40px auto;
+            max-width: 1200px;
+        }
+        .card {
+            background:rgb(134, 84, 84);/* Light gray background */
+            border-radius: 20px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            margin: 20px;
+            padding: 20px;
+            text-align: left;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color:black;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(236, 125, 186, 0.5);
+        }
+        .route-number {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: #ff4d4d;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .route-title {
+            font-size: 1.5rem;
+            color:#f5df18;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .timing {
+            font-size: 1rem;
+            line-height: 1.6;
+            color:white;
+        }
+        .timing strong {
+            color: #f5df18;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        🚌 Bus Schedules - TrackMyRide
+    </div>
+
+    <div class="container">
+
+        <!-- Bus Route 1 -->
+        <div class="card">
+            <span class="route-number">Route 1</span>
+            <div class="route-title">College Bus-1</div>
+            <h2 style="color:#18dbf5">KL 35 A 4324</h2>
+            <p class="timing">
+                Changanassery (7:30 AM) → Chingavanam (7:45 AM) → Njaliyakuzhi (7:55 AM) → Kaithepalam (08:05 AM) → Puthuppally (08:10 AM) → Manarcadu (08:15 AM) → Ayarkunnam (08:30 AM) → CEK (8:45 AM)  
+                <br><strong>Return:</strong> 04:15 PM (Mon-Thu), 04:45 PM (Fri)
+            </p>
+        </div>
+
+        <!-- Bus Route 2 -->
+        <div class="card">
+            <span class="route-number">Route 2</span>
+            <div class="route-title">College Bus-2</div>
+            <h2 style="color:#18dbf5">KL 35 B 7077</h2>
+            <p class="timing">
+                Kottayam (7:50 AM) → Kumaranallor (08:00 AM) → Sankranthi (08:05 AM) → Ettumanoor (08:10 AM) → Thiruvanchoor (08:20 AM) → Ayarkunnam (08:30 AM) → Manthadi (8:40 AM) → CEK (08:45 AM)  
+                <br><strong>Return:</strong> 04:15 PM (Mon-Thu), 04:45 PM (Fri)
+            </p>
+        </div>
+
+        <!-- Bus Route 3 -->
+        <div class="card">
+            <span class="route-number">Route 3</span>
+            <div class="route-title">College Bus-3</div>
+            <h2 style="color:#18dbf5">KL 35 C 5986</h2>
+            <p class="timing">
+                Poonjar (7:50 AM) → Erattupettah (08:08 AM) → Bharananganam (08:15 AM) → Pala (08:25 AM) → Mutholi (08:30 AM) → Cherpunkal (08:35 AM) → Kidangoor (08:40 AM) → CEK (08:45 AM)  
+                <br><strong>Return:</strong> 04:15 PM (Mon-Thu), 04:45 PM (Fri)
+            </p>
+        </div>
+
+        <!-- Bus Route 4 -->
+        <div class="card">
+            <span class="route-number">Route 4</span>
+            <div class="route-title">College Bus-4</div>
+            <h2 style="color:#18dbf5">KL 35 A 9991</h2>
+            <p class="timing">
+                Karukachal (7:45 AM) → Pampady (08:00 AM) → Kodungoor (08:15 AM) → Pallikkathodu (08:30 AM) → Mattakkara (08:40 AM) → CEK (08:45 AM)  
+                <br><strong>Return:</strong> 04:15 PM (Mon-Thu), 04:45 PM (Fri)
+            </p>
+        </div>
+
+        <!-- Bus Route 5 -->
+        <div class="card">
+            <span class="route-number">Route 5</span>
+            <div class="route-title">College Bus-5</div>
+            <h2 style="color:#18dbf5">KL 35 D 1325</h2>
+            <p class="timing">
+                Thalayolaparambu (7:45 AM) → Kaduthuruthy (08:00 AM) → Kuravilangad (08:10 AM) → Vempally (08:20 AM) → Vayala (08:30 AM) → Kidangoor (08:35 AM) → CEK (08:45 AM)  
+                <br><strong>Return:</strong> 04:15 PM (Mon-Thu), 04:45 PM (Fri)
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>

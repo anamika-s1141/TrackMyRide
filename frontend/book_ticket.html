@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book E-Ticket</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://cdn.vectorstock.com/i/500p/98/46/yellow-ticket-vector-1269846.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            padding: 30px;
+            max-width: 700px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .date-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .date-box {
+            width: 45%;
+            text-align: center;
+            position: relative;
+        }
+        .date-box label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .seats-container {
+            display: grid;
+            grid-template-columns: repeat(5, 40px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .seat {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .available {
+            background: green;
+            color: white;
+        }
+        .booked {
+            background: red;
+            color: white;
+        }
+        .status {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Book Your E-Ticket</h2>
+
+        <label for="days">Select Days:</label>
+        <select id="days" onchange="updateEndDate()">
+            <option value="1">1 Day (Free)</option>
+            <option value="2">2 Days (Paid)</option>
+            <option value="3">3 Days (Paid)</option>
+            <option value="4">4 Days (Paid)</option>
+            <option value="5">5 Days (Paid)</option>
+            <option value="6">6 Days (Paid)</option>
+            <option value="7">7 Days (Paid)</option>
+        </select>
+
+        <div class="date-container">
+            <div class="date-box">
+                <label for="start-date">Select Start Date</label>
+                <input type="date" id="start-date" onchange="updateEndDate()">
+            </div>
+            <div class="date-box">
+                <label for="end-date">End Date</label>
+                <input type="text" id="end-date" disabled>
+            </div>
+        </div>
+
+        <label for="payment">Payment Status:</label>
+        <select id="payment">
+            <option value="not-paid">Not Paid</option>
+            <option value="paid">Paid</option>
+        </select>
+
+        <button onclick="bookTicket()">Send Request</button>
+
+        <p id="approval" class="success hidden">E-ticket is booked ✅</p>
+
+        <h3>Available Seats</h3>
+        <div class="seats-container" id="seats-container"></div>
+        <p class="status">Green 🟩 = Available | Red 🟥 = Booked</p>
+    </div>
+
+    <script>
+        let totalSeats = 45; // Total seats in the bus
+        let bookedSeats = new Array(totalSeats).fill(false); // False means available
+
+        function renderSeats() {
+            const seatsContainer = document.getElementById("seats-container");
+            seatsContainer.innerHTML = ""; // Clear previous seats
+
+            for (let i = 0; i < totalSeats; i++) {
+                const seat = document.createElement("div");
+                seat.classList.add("seat");
+                seat.classList.add(bookedSeats[i] ? "booked" : "available");
+                seat.textContent = i + 1; // Seat number
+                seat.title = bookedSeats[i] ? "Booked" : "Available"; // Tooltip
+                seatsContainer.appendChild(seat);
+            }
+        }
+
+        function updateEndDate() {
+            const startDate = document.getElementById("start-date").value;
+            const days = parseInt(document.getElementById("days").value);
+
+            if (startDate) {
+                let start = new Date(startDate);
+                start.setDate(start.getDate() + (days - 1));
+                let endDate = start.toISOString().split("T")[0];
+                document.getElementById("end-date").value = endDate;
+            } else {
+                document.getElementById("end-date").value = "";
+            }
+        }
+
+        function bookTicket() {
+            const days = document.getElementById("days").value;
+            const payment = document.getElementById("payment").value;
+            const startDate = document.getElementById("start-date").value;
+
+            if (!startDate) {
+                alert("Please select a start date.");
+                return;
+            }
+
+            if (days > 1 && payment === "not-paid") {
+                alert("Please complete the payment for multiple days.");
+                return;
+            }
+
+            let bookedCount = bookedSeats.filter(seat => seat).length;
+            if (bookedCount >= totalSeats) {
+                alert("No seats available!");
+                return;
+            }
+
+            for (let i = 0; i < totalSeats; i++) {
+                if (!bookedSeats[i]) {
+                    bookedSeats[i] = true;
+                    break;
+                }
+            }
+
+            renderSeats(); // Update seat display
+            document.getElementById("approval").classList.remove("hidden");
+        }
+
+        renderSeats(); // Initial rendering
+    </script>
+
+</body>
+</html>

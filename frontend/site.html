@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://i.pinimg.com/736x/94/09/7e/94097e458fbb22184941be57aaab2c8f.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: rgba(0, 77, 64, 0.9);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 20px;
+            gap: 30px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .card h3 {
+            margin: 15px 0;
+            color: #007bff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border: none;
+            background: #ffc107;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #ff9800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://www.logoground.com/uploads11/dv11y2022312132022-07-162632888Product%20Tracking%20Logo.jpg" alt="TrackMyRide Logo" class="logo">
+        TrackMyRide - Admin Dashboard
+    </div>
+
+    <div class="container">
+
+        <!-- FIRST ROW (E-Ticket, Notification, Payment) -->
+        <div class="row">
+            <div class="card">
+                <img src="https://miro.medium.com/v2/resize:fit:800/1*VtAozzg_xdDzbuEQEDJB4A.jpeg" alt="E-Ticket Management">
+                <h3>E-Ticket Management</h3>
+                <p>View and approve student e-ticket requests.</p>
+                <a href="manage_tickets.html" class="btn">Manage Tickets</a>
+            </div>
+
+            <div class="card">
+                <img src="https://img.freepik.com/free-vector/blue-notification-bell-with-one-notification_78370-6899.jpg" alt="Notification">
+                <h3>Notification Management</h3>
+                <p>Send updates and alerts to students.</p>
+                <a href="manage_notifications.html" class="btn">Manage Notifications</a>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9DBYXRlHaCyMw3Wbg1yzt2hisP1O6Lg0vzQ&s" alt="Payment">
+                <h3>Payment Management</h3>
+                <p>Process and track student payments.</p>
+                <a href="manage_payments.html" class="btn">Manage Payments</a>
+            </div>
+        </div>
+
+        <!-- SECOND ROW (Student, Driver, Bus) -->
+        <div class="row">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLva0_GzB7u4KLZpP6ngdj-DWEDQM5VYz-Uw&s" alt="Student Management">
+                <h3>Student Management</h3>
+                <p>Manage student accounts and details.</p>
+                <a href="manage_students.html" class="btn">Manage Students</a>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ93lPnWq1B-9oW7V2c-kuUWGMVFOrT-jkx6A&s" alt="Driver Management">
+                <h3>Driver Management</h3>
+                <p>Assign and manage drivers.</p>
+                <a href="manage_drivers.html" class="btn">Manage Drivers</a>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1loISrORXY8mVcdQ675OFLzvGtdA8zOlldQ&s" alt="Bus Management">
+                <h3>Bus Management</h3>
+                <p>Manage bus schedules and details.</p>
+                <a href="manage_buses.html" class="btn">Manage Buses</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

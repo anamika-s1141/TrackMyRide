@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background: url('https://t4.ftcdn.net/jpg/10/18/60/55/360_F_1018605578_QvtZJiKXUbKmScclhZs0QN3I6cu7bm2I.jpg') no-repeat center center;
+            background-size: cover;
+            flex-direction: column;
+        }
+        .header {
+            width: 15%;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: linear-gradient(to right, navy 70%, orange 30%);
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            position: absolute;
+            top: 20px;
+            left: 0;
+        }
+        .header img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .header h1 {
+            color: white;
+            font-size: 1rem;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #00c3fe;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://www.logoground.com/uploads11/dv11y2022312132022-07-162632888Product%20Tracking%20Logo.jpg" alt="TrackMyRide Logo">
+        <h1>TrackMyRide</h1>
+    </div>
+    <div class="login-container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+            <p id="error-message" style="color: red;"></p>
+        </form>
+    </div>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var errorMessage = document.getElementById("error-message");
+
+            if (username === "student" && password === "student123") {
+                window.location.href = "dashboard.html"; 
+            } else if (username === "admin" && password === "password123") {
+                window.location.href = "site.html";
+            } else {
+                errorMessage.textContent = "Invalid username or password.";
+            }
+        });
+    </script>
+</body>
+</html>

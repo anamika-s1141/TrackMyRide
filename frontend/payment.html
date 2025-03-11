@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://static.vecteezy.com/system/resources/previews/004/218/721/non_2x/online-transfer-money-by-using-smartphone-concept-cashless-payment-hands-hold-phone-for-transactions-illustration-vector.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .payment-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.4);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        .card-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .card-icons img {
+            width: 40px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .cancel {
+            background: #333;
+            color: white;
+            margin-right: 10px;
+        }
+        .submit {
+            background: #28a745;
+            color: white;
+        }
+        .submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="payment-container">
+        <h2>Secure Payment</h2>
+
+        <div class="form-group">
+            <label for="student-type">Select Student Type:</label>
+            <select id="student-type" onchange="toggleFields()">
+                <option value="regular">Regular (Yearly Payment)</option>
+                <option value="irregular">Irregular (E-Ticket Payment)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" placeholder="Enter your first name">
+        </div>
+
+        <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" placeholder="Enter your last name">
+        </div>
+
+        <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+        </div>
+
+        <div class="card-icons">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="MasterCard">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/UPI_logo.svg/800px-UPI_logo.svg.png" alt="UPI_logo">
+        </div>
+
+        <!-- Valid Until for Regular Students -->
+        <div class="form-group" id="regular-valid-until">
+            <label>Valid Until</label>
+            <div style="display: flex; gap: 10px;">
+                <select id="expiry-month">
+                    <option>Month</option>
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>06</option>
+                    <option>07</option>
+                    <option>08</option>
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+                <select id="expiry-year">
+                    <option>Year</option>
+                    <option>2025</option>
+                    <option>2026</option>
+                    <option>2027</option>
+                    <option>2028</option>
+                    <option>2029</option>
+                    <option>2030</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Number of Days for Irregular Students -->
+        <div class="form-group" id="irregular-days" style="display: none;">
+            <label for="num-days">Number of Days</label>
+            <input type="number" id="num-days" placeholder="Enter number of days" oninput="calculateAmount()">
+        </div>
+
+        <div class="form-group">
+            <label for="payment-amount">Payment Amount (₹)</label>
+            <input type="text" id="payment-amount" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="123">
+        </div>
+
+        <div class="btn-group">
+            <button class="btn cancel">Cancel</button>
+            <button class="btn submit" id="submit-btn" disabled>Submit</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleFields() {
+            const studentType = document.getElementById("student-type").value;
+            const regularValidUntil = document.getElementById("regular-valid-until");
+            const irregularDays = document.getElementById("irregular-days");
+            const paymentAmount = document.getElementById("payment-amount");
+            const submitBtn = document.getElementById("submit-btn");
+
+            if (studentType === "regular") {
+                regularValidUntil.style.display = "block";
+                irregularDays.style.display = "none";
+                paymentAmount.value = "18000"; // Fixed price for regular students
+                submitBtn.disabled = false;
+            } else {
+                regularValidUntil.style.display = "none";
+                irregularDays.style.display = "block";
+                calculateAmount();
+            }
+        }
+
+        function calculateAmount() {
+            const numDays = parseInt(document.getElementById("num-days").value, 10) || 0;
+            const submitBtn = document.getElementById("submit-btn");
+            let paymentAmount = 0;
+
+            if (numDays < 2) {
+                paymentAmount = 0;
+                submitBtn.disabled = true;
+            } else {
+                paymentAmount = (numDays - 1) * 70;
+                submitBtn.disabled = false;
+            }
+
+            document.getElementById("payment-amount").value = paymentAmount;
+        }
+
+        // Initialize default selection
+        toggleFields();
+    </script>
+
+</body>
+</html>

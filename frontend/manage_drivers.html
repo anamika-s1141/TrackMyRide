@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Drivers - TrackMyRide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: url('https://cdn.prod.website-files.com/602a97fb7ff89c083c49cc06/64ae6f120f19a375e4fb8867_untitled-63.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            background: rgba(0, 77, 64, 0.9);
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            margin: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: black;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-edit {
+            background: #ffc107;
+        }
+        .btn-edit:hover {
+            background: #e0a800;
+        }
+        .btn-delete {
+            background: #dc3545;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .btn-add {
+            background: #28a745;
+            margin-top: 10px;
+        }
+        .btn-add:hover {
+            background: #218838;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Manage Drivers - TrackMyRide</div>
+
+    <div class="container">
+        <h2>Drivers Per Bus</h2>
+        <table id="driverTable">
+            <thead>
+                <tr>
+                    <th>Bus No</th>
+                    <th>Driver ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="driverList"></tbody>
+        </table>
+        <br>
+        <h2>Add New Driver</h2>
+        <select id="busNo">
+            <option value="Bus 1">Bus 1</option>
+            <option value="Bus 2">Bus 2</option>
+            <option value="Bus 3">Bus 3</option>
+            <option value="Bus 4">Bus 4</option>
+            <option value="Bus 5">Bus 5</option>
+        </select>
+        <input type="text" id="driverID" placeholder="Driver ID">
+        <input type="text" id="driverName" placeholder="Driver Name">
+        <input type="text" id="driverPhone" placeholder="Driver Phone">
+        <button class="btn btn-add" onclick="addDriver()">Add Driver</button>
+    </div>
+
+    <script>
+        function driverExists(busNo, driverID) {
+            let drivers = document.getElementById("driverList").children;
+            for (let driver of drivers) {
+                if (driver.cells[0].innerText === busNo && driver.cells[1].innerText === driverID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function addDriver() {
+            let busNo = document.getElementById("busNo").value;
+            let id = document.getElementById("driverID").value.trim();
+            let name = document.getElementById("driverName").value.trim();
+            let phone = document.getElementById("driverPhone").value.trim();
+
+            if (!id || !name || !phone) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            if (driverExists(busNo, id)) {
+                alert("Error: A driver with this ID already exists for the selected bus.");
+                return;
+            }
+
+            let tableBody = document.getElementById("driverList");
+
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${busNo}</td>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${phone}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editDriver(this)">Edit</button>
+                    <button class="btn btn-delete" onclick="deleteDriver(this)">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+
+            document.getElementById("driverID").value = "";
+            document.getElementById("driverName").value = "";
+            document.getElementById("driverPhone").value = "";
+        }
+
+        function deleteDriver(button) {
+            button.closest("tr").remove();
+        }
+
+        function editDriver(button) {
+            let row = button.closest("tr");
+            let cells = row.getElementsByTagName("td");
+
+            let newID = prompt("Edit Driver ID:", cells[1].innerText);
+            let newName = prompt("Edit Driver Name:", cells[2].innerText);
+            let newPhone = prompt("Edit Driver Phone:", cells[3].innerText);
+
+            if (newID && newName && newPhone) {
+                if (newID !== cells[1].innerText && driverExists(cells[0].innerText, newID)) {
+                    alert("Error: Another driver already has this ID for the selected bus.");
+                    return;
+                }
+                cells[1].innerText = newID;
+                cells[2].innerText = newName;
+                cells[3].innerText = newPhone;
+            }
+        }
+    </script>
+
+</body>
+</html>
