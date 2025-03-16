@@ -1,0 +1,3 @@
+"""
+Tickets app configuration
+""" 
