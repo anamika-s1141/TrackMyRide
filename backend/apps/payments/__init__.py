@@ -1,3 +1,0 @@
-"""
-Payment app configuration
-""" 
